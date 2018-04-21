@@ -12,4 +12,4 @@ ENV APP_NAME=mangoszero_test \
     MYSQL_CHARACTER_DBNAME=wow60_character
 EXPOSE 3724 8085
 COPY startapp.sh /startapp.sh
-#RUN apt-get update && apt-get install -y build-essential gcc g++ automake autoconf make patch libmysql++-dev libtool libssl-dev grep binutils zlibc libc6 libbz2-dev cmake subversion libboost-all-dev && apt-get autoclean
+RUN apt-get update && apt-get install -y build-essential gcc g++ automake autoconf make patch libmysql++-dev libtool libssl-dev grep binutils zlibc libc6 libbz2-dev cmake subversion libboost-all-dev && apt-get autoclean
