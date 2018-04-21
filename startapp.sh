@@ -1,15 +1,19 @@
-FROM jlesage/baseimage:debian-8
-ADD mangoszero_debian8_64bit.tar.bz2 /config/
-RUN apt-get update && apt-get install -y libssl1.0.0 libmysqlclient18 && apt-get autoclean
-# 设置环境变量.
-ENV APP_NAME=mangoszero_test \
-    MYSQL_ADDRESS=172.17.0.3 \
-    MYSQL_PORT=3306 \
-    MYSQL_USER=wow60 \
-    MYSQL_PASSWD=12345678 \
-    MYSQL_REALMD_DBNAME=wow60_realmd \
-    MYSQL_WORLD_DBNAME=wow60_mangos \
-    MYSQL_CHARACTER_DBNAME=wow60_character
-EXPOSE 3724 8085
-COPY startapp.sh /startapp.sh
-#RUN apt-get update && apt-get install -y build-essential gcc g++ automake autoconf make patch libmysql++-dev libtool libssl-dev grep binutils zlibc libc6 libbz2-dev cmake subversion libboost-all-dev && apt-get autoclean
+#!/bin/sh
+export HOME=/config
+chmod 777 /config/*
+# 删除并重建配置文件
+rm -rf /config/etc/realmd.conf
+cp -r /config/etc/realmd.conf.dist /config/etc/realmd.conf
+sed -i "s/127.0.0.1;3306;mangos;mangos;realmd/${MYSQL_ADDRESS};${MYSQL_PORT};${MYSQL_USER};${MYSQL_PASSWD};${MYSQL_REALMD_DBNAME};/g" /config/etc/realmd.conf
+# /config/bin/realmd -c /config/etc/realmd.conf &
+cd /config/bin/ && ./realmd &
+sleep 10
+sed -i '/AiPlayerbot.Enabled /c AiPlayerbot.Enabled = 0' /config/etc/mangosd.conf
+rm -rf /config/etc/mangosd.conf
+cp -r /config/etc/mangosd.conf.dist /config/etc/mangosd.conf
+sed -i "s/127.0.0.1;3306;root;mangos;realmd/${MYSQL_ADDRESS};${MYSQL_PORT};${MYSQL_USER};${MYSQL_PASSWD};${MYSQL_REALMD_DBNAME};/g" /config/etc/mangosd.conf
+sed -i "s/127.0.0.1;3306;root;mangos;mangos0/${MYSQL_ADDRESS};${MYSQL_PORT};${MYSQL_USER};${MYSQL_PASSWD};${MYSQL_WORLD_DBNAME};/g" /config/etc/mangosd.conf
+sed -i "s/127.0.0.1;3306;root;mangos;character0/${MYSQL_ADDRESS};${MYSQL_PORT};${MYSQL_USER};${MYSQL_PASSWD};${MYSQL_CHARACTER_DBNAME};/g" /config/etc/mangosd.conf
+sed -i '/DataDir                      = /c DataDir                      = "/config/data"' /config/etc/mangosd.conf
+cd /config/bin/ && ./mangosd
+sleep 60
