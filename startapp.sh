@@ -12,6 +12,6 @@ cp -r /config/etc/mangosd.conf.dist /config/etc/mangosd.conf
 sed -i "s/127.0.0.1;3306;root;mangos;realmd/${MYSQL_ADDRESS};${MYSQL_PORT};${MYSQL_USER};${MYSQL_PASSWD};${MYSQL_REALMD_DBNAME};/g" /config/etc/mangosd.conf
 sed -i "s/127.0.0.1;3306;root;mangos;mangos0/${MYSQL_ADDRESS};${MYSQL_PORT};${MYSQL_USER};${MYSQL_PASSWD};${MYSQL_WORLD_DBNAME};/g" /config/etc/mangosd.conf
 sed -i "s/127.0.0.1;3306;root;mangos;character0/${MYSQL_ADDRESS};${MYSQL_PORT};${MYSQL_USER};${MYSQL_PASSWD};${MYSQL_CHARACTER_DBNAME};/g" /config/etc/mangosd.conf
-sed -i '/DataDir                      = /c DataDir                      = "../data"' /config/etc/mangosd.conf
+sed -i '/DataDir                      = /c DataDir                      = "/config/data"' /config/etc/mangosd.conf
 /config/bin/mangosd -c /config/etc/mangosd.conf
 sleep 60
