@@ -14,4 +14,4 @@ sed -i "s/127.0.0.1;3306;root;mangos;mangos0/${MYSQL_ADDRESS};${MYSQL_PORT};${MY
 sed -i "s/127.0.0.1;3306;root;mangos;character0/${MYSQL_ADDRESS};${MYSQL_PORT};${MYSQL_USER};${MYSQL_PASSWD};${MYSQL_CHARACTER_DBNAME};/g" /config/etc/mangosd.conf
 sed -i '/DataDir                      = /c DataDir                      = "/config/data"' /config/etc/mangosd.conf
 /config/bin/mangosd -c /config/etc/mangosd.conf
-sleep 60
+sleep 6000000000000000
