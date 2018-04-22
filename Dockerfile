@@ -1,6 +1,5 @@
-FROM jlesage/baseimage:debian-8
-ADD mangoszero_debian8_64bit.tar.bz2 /config/
-RUN apt-get update && apt-get install -y libssl1.0.0 libmysqlclient18 && apt-get autoclean
+FROM phusion/baseimage
+RUN apt-get update && apt-get install -y libssl1.0.0 libmysql++-dev
 # 设置环境变量.
 ENV APP_NAME=mangoszero_test \
     MYSQL_ADDRESS=172.17.0.3 \
@@ -11,5 +10,9 @@ ENV APP_NAME=mangoszero_test \
     MYSQL_WORLD_DBNAME=wow60_mangos \
     MYSQL_CHARACTER_DBNAME=wow60_character
 EXPOSE 3724 8085
-COPY startapp.sh /startapp.sh
-RUN apt-get update && apt-get install -y build-essential gcc g++ automake autoconf make patch libmysql++-dev libtool libssl-dev grep binutils zlibc libc6 libbz2-dev cmake subversion libboost-all-dev && apt-get autoclean
+ENTRYPOINT ["/sbin/my_init"]
+RUN mkdir /etc/service/mangoszero
+COPY startapp.sh /etc/service/mangoszero/run
+RUN chmod +x /etc/service/mangoszero/run
+ADD mangoszero_ubuntu16_64bit.tar.bz2 /etc/service/mangoszero/
+RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
