@@ -11,7 +11,7 @@ ENV APP_NAME=mangoszero_test \
     MYSQL_CHARACTER_DBNAME=wow60_character
 EXPOSE 3724 8085
 ENTRYPOINT ["/sbin/my_init"]
-RUN mkdir /etc/service/mangoszero
+RUN rm -rf /etc/service/* && mkdir /etc/service/mangoszero
 COPY startapp.sh /etc/service/mangoszero/run
 RUN chmod +x /etc/service/mangoszero/run
 ADD mangoszero_ubuntu16_64bit.tar.bz2 /etc/service/mangoszero/
